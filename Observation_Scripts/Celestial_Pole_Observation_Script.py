@@ -41,19 +41,21 @@ for pointing in pointings:
     obs_time = Time(time.time(), format='unix', location=leusch)
     pointings_altaz = astropy.coordinates.AltAz(location=leusch, obstime=obs_time)
     final_pointings_altaz = pointing.transform_to(pointings_altaz)
+    alt = final_pointings_altaz.alt.deg
+    az = final_pointings_altaz.az.deg
+    if alt <= 85 and alt > 5 and az > 5 and az < 360:
+        dish.point(final_pointings_altaz.alt.deg, final_pointings_altaz.az.deg)
     
-    dish.point(final_pointings_altaz.alt.deg, final_pointings_altaz.az.deg)
-    
-    # noise on 
-    noise.on()
-    spec.read_spec('../Data/celestial_pole-noiseon_' + str(i) + '.fits', 2, (galactic_1d_grid[i][0], galactic_1d_grid[i][1]))
-    
-    # noise off 
-    noise.off()
-    spec.read_spec('../Data/celestial_pole-noiseoff_' + str(i) + '.fits', 20, (galactic_1d_grid[i][0], galactic_1d_grid[i][1]))
-    
-    print(str(final_pointings_altaz.alt.deg), str(final_pointings_altaz.az.deg), str(i))
-    i += 1
+        # noise on 
+        noise.on()
+        spec.read_spec('../Data/celestial_pole-noiseon_' + str(i) + '.fits', 2, (galactic_1d_grid[i][0], galactic_1d_grid[i][1]))
+
+        # noise off 
+        noise.off()
+        spec.read_spec('../Data/celestial_pole-noiseoff_' + str(i) + '.fits', 20, (galactic_1d_grid[i][0], galactic_1d_grid[i][1]))
+
+        print(str(final_pointings_altaz.alt.deg), str(final_pointings_altaz.az.deg), str(i))
+        i += 1
 
 dish.stow()
 print("THE RECORDING HAS ENDED AND THE DISH HAS BEEN STOWED")
