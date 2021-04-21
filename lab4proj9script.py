@@ -29,7 +29,7 @@ alt,az = ugradio.coord.get_altaz(ra, dec, jd)
 #dish.point(alt,az)
 
 spec = ugradio.leusch.Spectrometer()
-spec.read_spec('lab4data1-noiseon.fits', 20, (193.5,27.1167))
+spec.read_spec('lab4data1_attempt_2-noiseon.fits', 20, (193.5,27.1167))
 print(spec.int_time())
 
 #switch to noise off
@@ -37,5 +37,5 @@ noise.off()
 
 #dish.point(alt,az)
 
-spec.read_spec('lab4data1-noiseoff.fits', 20, (193.5,27.1167))
+spec.read_spec('lab4data1_attempt_2-noiseoff.fits', 20, (193.5,27.1167))
 print(spec.int_time())
