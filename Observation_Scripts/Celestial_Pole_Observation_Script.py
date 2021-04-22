@@ -31,11 +31,11 @@ leusch = astropy.coordinates.EarthLocation(lat=leusch_lat, lon=leusch_lon, heigh
 for lat in galactic_latitude_array:
     for long in galactic_longitude_array:
         galactic_1d_grid.append((lat, long))
-        
+
 galactic_1d_grid = np.array(galactic_1d_grid)
 pointings = astropy.coordinates.SkyCoord(galactic_1d_grid[:,1], galactic_1d_grid[:,0], frame='galactic', unit='deg')
 
-# iterate through points 
+# iterate through points
 i = 0
 for pointing in pointings:
     obs_time = Time(time.time(), format='unix', location=leusch)
@@ -43,14 +43,14 @@ for pointing in pointings:
     final_pointings_altaz = pointing.transform_to(pointings_altaz)
     alt = final_pointings_altaz.alt.deg
     az = final_pointings_altaz.az.deg
-    if alt <= 85 and alt > 5 and az > 5 and az < 360:
+    if alt < 85 and alt > 15 and az > 5 and az < 350:
         dish.point(final_pointings_altaz.alt.deg, final_pointings_altaz.az.deg)
-    
-        # noise on 
+
+        # noise on
         noise.on()
         spec.read_spec('../Data/celestial_pole-noiseon_' + str(i) + '.fits', 2, (galactic_1d_grid[i][0], galactic_1d_grid[i][1]))
 
-        # noise off 
+        # noise off
         noise.off()
         spec.read_spec('../Data/celestial_pole-noiseoff_' + str(i) + '.fits', 20, (galactic_1d_grid[i][0], galactic_1d_grid[i][1]))
 
@@ -63,5 +63,5 @@ print("HAVE A NICE DAY")
 # alt az is not in degrees
 # test on jupyter notebook
 # stow?
-# save to new repo and old repo 
-# save to "Data" folder that u create 
+# save to new repo and old repo
+# save to "Data" folder that u create
